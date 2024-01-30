@@ -7,6 +7,8 @@
 #include <QDockWidget>
 #include <QFileSystemModel>
 #include <QTreeView>
+#include <QGridLayout>
+#include <QLabel>
 
 #include "../data/transactions_model.h"
 
@@ -23,6 +25,10 @@ namespace ag {
     private:
         TransactionsModel& transactions;
 
-        QTreeView list_view = QTreeView(this);
+        QWidget window = QWidget(this);
+        QGridLayout layout = QGridLayout(&this->window);
+        QTreeView transaction_list_view = QTreeView(&this->window);
+        QLabel count_label = QLabel(&this->window);
+        QLabel total_label = QLabel(&this->window);
     };
 }

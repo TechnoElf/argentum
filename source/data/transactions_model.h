@@ -12,6 +12,8 @@
 
 namespace ag {
     struct TransactionsModel : QAbstractItemModel {
+        std::vector<Transaction> cache;
+
     public:
         explicit TransactionsModel(std::string&& api_key, QObject* parent = nullptr) : QAbstractItemModel(parent), sumup_api(std::move(api_key), this) {}
 
@@ -32,7 +34,5 @@ namespace ag {
 
     private:
         SumupApi sumup_api;
-
-        std::vector<Transaction> cache;
     };
 }

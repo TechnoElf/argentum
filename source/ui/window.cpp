@@ -16,7 +16,6 @@ namespace ag {
         });
 
         [[maybe_unused]] QMenu* file_menu = this->menuBar()->addMenu("File");
-        file_menu->addAction(&this->fetch_action);
         file_menu->addAction(&this->export_action);
         file_menu->addAction(&this->settings_action);
         [[maybe_unused]] QMenu* edit_menu = this->menuBar()->addMenu("Edit");
@@ -48,11 +47,6 @@ namespace ag {
         });
         connect(&this->timeline_window, &QDockWidget::visibilityChanged, this, [&](){
             this->timeline_window_action.setChecked(this->timeline_window.isVisible());
-        });
-
-        this->fetch_action.setStatusTip("Fetch");
-        connect(&this->fetch_action, &QAction::triggered, this, [&](){
-
         });
 
         this->export_action.setStatusTip("Export");

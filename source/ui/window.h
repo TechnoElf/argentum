@@ -31,7 +31,6 @@ namespace ag {
 
         QAction transaction_list_window_action = QAction("Transaction List", this);
         QAction timeline_window_action = QAction("Timeline", this);
-        QAction fetch_action = QAction("Fetch", this);
         QAction export_action = QAction("Export", this);
         QAction settings_action = QAction("Settings", this);
 
