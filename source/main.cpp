@@ -8,6 +8,8 @@
 #include "ui/window.h"
 
 int main(int argc, char* argv[]) {
+    std::srand(std::time(nullptr));
+
     QApplication app(argc, argv);
     QApplication::setApplicationName("argentum");
     QApplication::setApplicationDisplayName("Argentum");

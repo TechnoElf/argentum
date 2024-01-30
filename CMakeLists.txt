@@ -23,6 +23,8 @@ qt_add_executable(argentum
         source/data/transactions_model.h
         source/api/sumup.cpp
         source/api/sumup.h
+        source/util/flavor.h
+        source/util/flavor.cpp
 )
 
 target_link_libraries(argentum

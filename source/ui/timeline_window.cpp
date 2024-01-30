@@ -32,5 +32,7 @@ namespace ag {
         });
 
         this->setWidget(&this->list_view);
+
+        this->list_view.selectionModel()->select(model.index(0), QItemSelectionModel::ClearAndSelect);
     }
 }

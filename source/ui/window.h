@@ -10,6 +10,7 @@
 #include <QDockWidget>
 #include <QTreeView>
 #include <QFileSystemModel>
+#include <QStatusBar>
 
 #include "transaction_list_window.h"
 #include "timeline_window.h"
@@ -34,6 +35,10 @@ namespace ag {
         QAction export_action = QAction("Export", this);
         QAction settings_action = QAction("Settings", this);
 
+        QWidget status_bar = QWidget(this);
+        QHBoxLayout status_bar_layout = QHBoxLayout(&this->status_bar);
+        QLabel flavor_label = QLabel(&this->status_bar);
+        QLabel status_label = QLabel(&this->status_bar);
         TransactionListWindow transaction_list_window = TransactionListWindow(this->transactions_model, this);
         TimelineWindow timeline_window = TimelineWindow(this);
 
