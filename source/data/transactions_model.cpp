@@ -17,7 +17,7 @@ namespace ag {
     }
 
     int TransactionsModel::rowCount([[maybe_unused]] const QModelIndex& parent) const {
-        return this->cache.size();
+        return this->current.size();
     }
 
     int TransactionsModel::columnCount([[maybe_unused]] const QModelIndex& parent) const {
@@ -30,10 +30,10 @@ namespace ag {
         if (index.row() >= this->rowCount()) { return {}; }
 
         switch (index.column()) {
-            case 0: return this->cache[index.row()].id.c_str();
-            case 1: return this->cache[index.row()].amount;
-            case 2: return this->cache[index.row()].status.c_str();
-            case 3: return this->cache[index.row()].timestamp.c_str();
+            case 0: return this->current[index.row()].id.c_str();
+            case 1: return this->current[index.row()].amount;
+            case 2: return this->current[index.row()].status.to_string();
+            case 3: return this->current[index.row()].timestamp.c_str();
             default: return "Error";
         }
     }
@@ -64,9 +64,29 @@ namespace ag {
             {newest.addDays(1), {0, 0}},
             [&](std::vector<Transaction>&& res) {
                 this->cache = res;
-                this->layoutChanged();
-                this->dataChanged(this->createIndex(0, 0), this->createIndex(this->cache.size(), this->columnCount()));
+                this->apply();
             }
         );
+    }
+
+    void TransactionsModel::set_status_filter(Status status) {
+        this->status_filter = status;
+        this->apply();
+    }
+
+    void TransactionsModel::set_user_filter(const char* user) {
+        this->user_filter = user;
+        this->apply();
+    }
+
+    void TransactionsModel::apply() {
+        this->current.clear();
+        std::copy_if(this->cache.begin(), this->cache.end(), std::back_inserter(this->current), [this](const Transaction& t) {
+            return t.status == this->status_filter &&
+                t.user.contains(user_filter);
+        });
+
+        this->layoutChanged();
+        this->dataChanged(this->createIndex(0, 0), this->createIndex(this->cache.size(), this->columnCount()));
     }
 }

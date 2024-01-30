@@ -5,6 +5,37 @@
 #include "transaction.h"
 
 namespace ag {
+    bool Status::operator==(const Status& other) const {
+        return this->kind == other.kind || this->kind == StatusKind::Any || other.kind == StatusKind::Any;
+    }
+
+    Status Status::from_string(const std::string& v) {
+        for (const auto& [k, n] : Status::kinds) {
+            if (v == n) {
+                return {k};
+            }
+        }
+        return {StatusKind::Unknown};
+    }
+    
+    const char* Status::to_string() const {
+        for (const auto& [k, n] : Status::kinds) {
+            if (this->kind == k) {
+                return n;
+            }
+        }
+        return "Unknown";
+    }
+
+    Status Status::from_api_string(const std::string& v) {
+        if (v == "SUCCESSFUL") {
+            return {StatusKind::Successful};
+        } else if (v == "FAILED") {
+            return {StatusKind::Failed};
+        } else {
+            return {StatusKind::Unknown};
+        }
+    }
 
     Result<Transaction> ag::Transaction::try_parse(QJsonObject&& json) {
         double amount = json["amount"].toDouble();
@@ -12,7 +43,7 @@ namespace ag {
         std::string id = json["id"].toString().toUtf8().constData();
         int installments_count = json["installments_count"].toInt();
         std::string payment_type = json["payment_type"].toString().toUtf8().constData();
-        std::string status = json["status"].toString().toUtf8().constData();
+        Status status = Status::from_api_string(json["status"].toString().toUtf8().constData());
         std::string timestamp = json["timestamp"].toString().toUtf8().constData();
         std::string transaction_code = json["transaction_code"].toString().toUtf8().constData();
         std::string payout_plan = json["payout_plan"].toString().toUtf8().constData();
@@ -57,5 +88,4 @@ namespace ag {
 
         return {std::move(transactions)};
     }
-
 }

@@ -12,7 +12,7 @@
 
 namespace ag {
     struct TransactionsModel : QAbstractItemModel {
-        std::vector<Transaction> cache;
+        std::vector<Transaction> current;
 
     public:
         explicit TransactionsModel(std::string&& api_key, QObject* parent = nullptr) : QAbstractItemModel(parent), sumup_api(std::move(api_key), this) {}
@@ -31,8 +31,17 @@ namespace ag {
         [[nodiscard]] Qt::ItemFlags flags(const QModelIndex& index) const override;
 
         void fetch(const QDate& oldest, const QDate& newest);
+        void set_status_filter(Status status);
+        void set_user_filter(const char* user);
 
     private:
         SumupApi sumup_api;
+
+        std::vector<Transaction> cache;
+
+        Status status_filter = {StatusKind::Any};
+        std::string user_filter = "";
+
+        void apply();
     };
 }
