@@ -34,6 +34,8 @@ namespace ag {
         QGridLayout filter_layout = QGridLayout(&this->filters);
         QLabel status_filter_label = QLabel(&this->filters);
         QComboBox status_filter = QComboBox(&this->filters);
+        QLabel type_filter_label = QLabel(&this->filters);
+        QComboBox type_filter = QComboBox(&this->filters);
         QLabel user_filter_label = QLabel(&this->filters);
         QLineEdit user_filter = QLineEdit(&this->filters);
 
