@@ -1,6 +1,8 @@
 Argentum
 ===
 
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/TechnoElf/argentum/cmake.yml)
+
 A client for the SumUp API that allows retrieving more detailed statistics from the transaction data than the standard SumUp web interface.
 
 Building
