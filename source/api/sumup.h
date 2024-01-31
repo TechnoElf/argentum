@@ -18,6 +18,8 @@ namespace ag {
         SumupApi(SumupApi&& other) = delete;
         SumupApi& operator=(SumupApi&& other) = delete;
 
+        void set_key(std::string&& api_key);
+
         void transactions_history(const QDateTime& oldest, const QDateTime& newest, const std::function<void(std::vector<Transaction>&&)>& callback);
 
     private:

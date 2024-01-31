@@ -47,6 +47,7 @@ namespace ag {
         this->layout.addWidget(&this->total_label, 2, 1, 1, 1);
 
         this->layout.setContentsMargins(0, 0, 0, 0);
+        this->window.setLayout(&this->layout);
         this->setWidget(&this->window);
     }
 }

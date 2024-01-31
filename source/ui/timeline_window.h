@@ -17,12 +17,14 @@ namespace ag {
     Q_OBJECT
 
     public:
-        explicit TimelineWindow(QWidget* parent = nullptr);
+        explicit TimelineWindow(uint32_t timeline_size, QWidget* parent = nullptr);
 
         TimelineWindow(const TimelineWindow& other) = delete;
         TimelineWindow& operator=(const TimelineWindow& other) = delete;
         TimelineWindow(TimelineWindow&& other) = delete;
         TimelineWindow& operator=(TimelineWindow&& other) = delete;
+
+        void set_timeline_size(uint32_t timeline_size);
 
     private:
         QStringList dates_list = QStringList();

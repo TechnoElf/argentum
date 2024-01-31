@@ -58,6 +58,10 @@ namespace ag {
         return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
     }
 
+    void TransactionsModel::set_key(std::string&& key) {
+        this->sumup_api.set_key(std::move(key));
+    }
+
     void TransactionsModel::fetch(const QDate& oldest, const QDate& newest) {
         this->sumup_api.transactions_history(
             {oldest, {0, 0}},

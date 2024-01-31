@@ -25,6 +25,8 @@ qt_add_executable(argentum
         source/api/sumup.h
         source/util/flavor.h
         source/util/flavor.cpp
+        source/ui/settings_window.cpp
+        source/ui/settings_window.h
 )
 
 target_link_libraries(argentum

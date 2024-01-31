@@ -72,7 +72,9 @@ namespace ag {
 
         this->settings_action.setStatusTip("Settings");
         connect(&this->settings_action, &QAction::triggered, this, [&](){
-
+            this->settings_window.exec();
+            this->transactions_model.set_key(this->settings.value("api/key").toString().toUtf8().constData());
+            this->timeline_window.set_timeline_size(this->settings.value("ui/timeline_size").toInt());
         });
     }
 }

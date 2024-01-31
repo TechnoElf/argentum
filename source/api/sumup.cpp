@@ -10,6 +10,23 @@
 #include <QJsonDocument>
 
 namespace ag {
+    void SumupApi::set_key(std::string&& key) {
+        this->api_key = key;
+    }
+
+    void SumupApi::transactions_history(const QDateTime& oldest, const QDateTime& newest, const std::function<void(std::vector<Transaction>&&)>& callback) {
+        std::string args;
+        args += "oldest_time=" + std::string(oldest.toUTC().toString(Qt::DateFormat::ISODate).toUtf8().constData()) + "&";
+        args += "newest_time=" + std::string(newest.toUTC().toString(Qt::DateFormat::ISODate).toUtf8().constData()) + "&";
+        args += "limit=10&order=ascending";
+
+        transactions_recurse(args, [=](QJsonArray&& items){
+            if (auto res = try_parse_transactions(std::move(items)); res.has_value()) {
+                callback(std::move(*res));
+            }
+        });
+    }
+
     void SumupApi::transactions_recurse(const std::string& args, const std::function<void(QJsonArray&&)>& callback) {
         QNetworkRequest req;
         req.setUrl(QUrl((this->api_url + "me/transactions/history?" + args).c_str()));
@@ -34,19 +51,6 @@ namespace ag {
                 });
             } else {
                 callback(std::move(items));
-            }
-        });
-    }
-
-    void SumupApi::transactions_history(const QDateTime& oldest, const QDateTime& newest, const std::function<void(std::vector<Transaction>&&)>& callback) {
-        std::string args;
-        args += "oldest_time=" + std::string(oldest.toUTC().toString(Qt::DateFormat::ISODate).toUtf8().constData()) + "&";
-        args += "newest_time=" + std::string(newest.toUTC().toString(Qt::DateFormat::ISODate).toUtf8().constData()) + "&";
-        args += "limit=10&order=ascending";
-
-        transactions_recurse(args, [=](QJsonArray&& items){
-            if (auto res = try_parse_transactions(std::move(items)); res.has_value()) {
-                callback(std::move(*res));
             }
         });
     }

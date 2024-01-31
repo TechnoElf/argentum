@@ -15,6 +15,7 @@
 #include "transaction_list_window.h"
 #include "timeline_window.h"
 #include "../data/transactions_model.h"
+#include "settings_window.h"
 
 namespace ag {
     struct Window : public QMainWindow {
@@ -40,7 +41,9 @@ namespace ag {
         QLabel flavor_label = QLabel(&this->status_bar);
         QLabel status_label = QLabel(&this->status_bar);
         TransactionListWindow transaction_list_window = TransactionListWindow(this->transactions_model, this);
-        TimelineWindow timeline_window = TimelineWindow(this);
+        TimelineWindow timeline_window = TimelineWindow(this->settings.value("ui/timeline_size").toInt(), this);
+
+        SettingsWindow settings_window = SettingsWindow(this->settings, this);
 
         void define_actions();
     };

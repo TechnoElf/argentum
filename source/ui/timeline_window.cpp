@@ -5,14 +5,9 @@
 #include "timeline_window.h"
 
 namespace ag {
-    TimelineWindow::TimelineWindow(QWidget* parent) : QDockWidget("Timeline", parent) {
-        QDate date = QDate::currentDate();
-        for (int i = 0; i < 100; i++) {
-            this->dates_list.append(date.toString(Qt::ISODate));
-            date = date.addDays(-1);
-        }
+    TimelineWindow::TimelineWindow(uint32_t timeline_size, QWidget* parent) : QDockWidget("Timeline", parent) {
+        set_timeline_size(timeline_size);
 
-        this->model.setStringList(this->dates_list);
         this->list_view.setModel(&this->model);
         this->list_view.setSelectionMode(QAbstractItemView::ContiguousSelection);
         this->list_view.setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -34,5 +29,15 @@ namespace ag {
         this->setWidget(&this->list_view);
 
         this->list_view.selectionModel()->select(model.index(0), QItemSelectionModel::ClearAndSelect);
+    }
+
+    void TimelineWindow::set_timeline_size(uint32_t timeline_size) {
+        this->dates_list.clear();
+        QDate date = QDate::currentDate();
+        for (uint32_t i = 0; i < timeline_size; i++) {
+            this->dates_list.append(date.toString(Qt::ISODate));
+            date = date.addDays(-1);
+        }
+        this->model.setStringList(this->dates_list);
     }
 }

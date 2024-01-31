@@ -30,6 +30,8 @@ namespace ag {
         [[nodiscard]] QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
         [[nodiscard]] Qt::ItemFlags flags(const QModelIndex& index) const override;
 
+        void set_key(std::string&& key);
+
         void fetch(const QDate& oldest, const QDate& newest);
         void set_status_filter(Status status);
         void set_user_filter(const char* user);
