@@ -1,4 +1,4 @@
-name: CMake
+name: Build with CMake
 
 on:
   push:
@@ -14,17 +14,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout
+      uses: actions/checkout@v3
 
-    - uses: egor-tensin/setup-gcc@v1
+    - name: Install GCC
+      uses: egor-tensin/setup-gcc@v1
       with:
         version: 13
 
-    - uses: jurplel/install-qt-action@v3
+    - name: Install QT
+      uses: jurplel/install-qt-action@v3
       with:
         version: '6.5.2'
 
-    - name: Configure CMake
+    - name: Configure
       run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
     - name: Build
@@ -34,3 +37,8 @@ jobs:
       working-directory: ${{github.workspace}}/build
       run: ctest -C ${{env.BUILD_TYPE}}
 
+    - name: Upload
+      uses: actions/upload-artifact@v4
+      with:
+        name: argentum
+        path: ${{github.workspace}}/build/argentum
