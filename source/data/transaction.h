@@ -12,104 +12,147 @@
 #include <QJsonDocument>
 
 #include "../util/error.h"
+#include "../util/enum.h"
 
 namespace ag {
-    enum class StatusKind {
-        Any,
-        Successful,
-        Cancelled,
-        Failed,
-        Pending,
-        Unknown
-    };
-
-    struct Status {
-        StatusKind kind;
-
-        static constexpr std::array<std::tuple<StatusKind, const char*, const char*>, 5> kinds = {
-            std::tuple(StatusKind::Any, "Any", ""),
-            std::tuple(StatusKind::Successful, "Successful", "SUCCESSFUL"),
-            std::tuple(StatusKind::Cancelled, "Cancelled", "CANCELLED"),
-            std::tuple(StatusKind::Failed, "Failed", "FAILED"),
-            std::tuple(StatusKind::Pending, "Pending", "PENDING")
-        };
-
-    public:
-        bool operator==(const Status& other) const;
-
-        static Status from_string(const std::string& v);
-        const char* to_string() const;
-
-        static Status from_api_string(const std::string& v);
-    };
-
-    enum class CurrencyKind {
-        Any,
-        Eur,
-        Unknown
-    };
-
     struct Currency {
-        CurrencyKind kind;
+        enum class Kind {
+            Any,
+            Eur,
+            Unknown
+        } kind;
 
-        static constexpr std::array<std::tuple<CurrencyKind, const char*, const char*, const char*>, 2> kinds = {
-            std::tuple(CurrencyKind::Any, "Any", "", "?"),
-            std::tuple(CurrencyKind::Eur, "Euro", "EUR", "€")
+        static constexpr std::array<std::tuple<Kind, const char*, const char*, const char*>, 2> kinds = {
+            std::tuple(Kind::Any, "Any", "", "?"),
+            std::tuple(Kind::Eur, "Euro", "EUR", "€")
         };
 
-    public:
-        bool operator==(const Currency& other) const;
-
-        static Currency from_string(const std::string& v);
-        const char* to_string() const;
-
-        static Currency from_api_string(const std::string& v);
         const char* to_symbol() const;
     };
 
-    enum class TransactionTypeKind {
-        Any,
-        Payment,
-        Refund,
-        ChargeBack,
-        Unknown
+    struct PaymentType {
+        enum class Kind {
+            Any,
+            Ecom,
+            Recurring,
+            Boleto,
+            Unknown
+        } kind;
+
+        static constexpr std::array<std::tuple<Kind, const char*, const char*>, 4> kinds = {
+            std::tuple(Kind::Any, "Any", ""),
+            std::tuple(Kind::Ecom, "Ecom", "ECOM"),
+            std::tuple(Kind::Recurring, "Recurring", "RECURRING"),
+            std::tuple(Kind::Boleto, "Boleto", "BOLETO"),
+        };
+    };
+
+    struct Status {
+        enum class Kind {
+            Any,
+            Successful,
+            Cancelled,
+            Failed,
+            Pending,
+            Unknown
+        } kind;
+
+        static constexpr std::array<std::tuple<Kind, const char*, const char*>, 5> kinds = {
+            std::tuple(Kind::Any, "Any", ""),
+            std::tuple(Kind::Successful, "Successful", "SUCCESSFUL"),
+            std::tuple(Kind::Cancelled, "Cancelled", "CANCELLED"),
+            std::tuple(Kind::Failed, "Failed", "FAILED"),
+            std::tuple(Kind::Pending, "Pending", "PENDING")
+        };
+    };
+
+    struct PayoutPlan {
+        enum class Kind {
+            Any,
+            SinglePayment,
+            TrueInstallment,
+            AcceleratedInstallment,
+            Unknown
+        } kind;
+
+        static constexpr std::array<std::tuple<Kind, const char*, const char*>, 4> kinds = {
+            std::tuple(Kind::Any, "Any", ""),
+            std::tuple(Kind::SinglePayment, "Single payment", " SINGLE_PAYMENT"),
+            std::tuple(Kind::TrueInstallment, "True installment", "TRUE_INSTALLMENT"),
+            std::tuple(Kind::AcceleratedInstallment, "Accelerated installment", "ACCELERATED_INSTALLMENT"),
+        };
+    };
+
+    struct CardType {
+        enum class Kind {
+            Any,
+            Visa,
+            Amex,
+            Cup,
+            Diners,
+            Discover,
+            Elo,
+            Elv,
+            Hipercard,
+            Jcb,
+            Maestro,
+            Mastercard,
+            VisaElectron,
+            VisaVpay,
+            Unknown
+        } kind;
+
+        static constexpr std::array<std::tuple<Kind, const char*, const char*>, 14> kinds = {
+            std::tuple(Kind::Any, "Any", ""),
+            std::tuple(Kind::Visa, "Visa", "VISA"),
+            std::tuple(Kind::Amex, "American Express", "AMEX"),
+            std::tuple(Kind::Cup, "Cup", "CUP"),
+            std::tuple(Kind::Diners, "Diners Club", "DINERS"),
+            std::tuple(Kind::Discover, "Discover", "DISCOVER"),
+            std::tuple(Kind::Elo, "Elo", "ELO"),
+            std::tuple(Kind::Elv, "Elv", "ELV"),
+            std::tuple(Kind::Hipercard, "Hipercard", "HIPERCARD"),
+            std::tuple(Kind::Jcb, "JCB", "JCB"),
+            std::tuple(Kind::Maestro, "Maestro", "MAESTRO"),
+            std::tuple(Kind::Mastercard, "Mastercard", "MASTERCARD"),
+            std::tuple(Kind::VisaElectron, "Visa Electron", "VISA_ELECTRON"),
+            std::tuple(Kind::VisaVpay, "Visa V Pay ", "VISA_VPAY")
+        };
     };
 
     struct TransactionType {
-        TransactionTypeKind kind;
+        enum class Kind {
+            Any,
+            Payment,
+            Refund,
+            ChargeBack,
+            Unknown
+        } kind;
 
-        static constexpr std::array<std::tuple<TransactionTypeKind, const char*, const char*>, 4> kinds = {
-            std::tuple(TransactionTypeKind::Any, "Any", ""),
-            std::tuple(TransactionTypeKind::Payment, "Payment", "PAYMENT"),
-            std::tuple(TransactionTypeKind::Refund, "Refund", "REFUND"),
-            std::tuple(TransactionTypeKind::ChargeBack, "Chargeback", "CHARGE_BACK")
+        static constexpr std::array<std::tuple<Kind, const char*, const char*>, 4> kinds = {
+            std::tuple(Kind::Any, "Any", ""),
+            std::tuple(Kind::Payment, "Payment", "PAYMENT"),
+            std::tuple(Kind::Refund, "Refund", "REFUND"),
+            std::tuple(Kind::ChargeBack, "Chargeback", "CHARGE_BACK")
         };
-
-    public:
-        bool operator==(const TransactionType& other) const;
-
-        static TransactionType from_string(const std::string& v);
-        const char* to_string() const;
-
-        static TransactionType from_api_string(const std::string& v);
     };
 
     struct Transaction {
         double amount;
-        Currency currency;
+        Enum<Currency> currency;
         std::string id;
         int installments_count;
-        std::string payment_type;
-        Status status;
+        Enum<PaymentType> payment_type;
+        Enum<Status> status;
         QDateTime timestamp;
         std::string transaction_code;
-        std::string payout_plan;
+        Enum<PayoutPlan> payout_plan;
         int payouts_received;
         int payouts_total;
         std::string product_summary;
-        std::string card_type;
+        Enum<CardType> card_type;
         std::string transaction_id;
-        TransactionType type;
+        Enum<TransactionType> type;
         std::string user;
 
     public:

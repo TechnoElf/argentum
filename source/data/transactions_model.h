@@ -33,8 +33,8 @@ namespace ag {
         void set_key(std::string&& key);
 
         void fetch(const QDate& oldest, const QDate& newest);
-        void set_status_filter(Status status);
-        void set_type_filter(TransactionType type);
+        void set_status_filter(Enum<Status> status);
+        void set_type_filter(Enum<TransactionType> type);
         void set_user_filter(const char* user);
 
     private:
@@ -42,8 +42,8 @@ namespace ag {
 
         std::vector<Transaction> cache;
 
-        Status status_filter = {StatusKind::Any};
-        TransactionType type_filter = {TransactionTypeKind::Any};
+        Enum<Status> status_filter = {Status::Kind::Any};
+        Enum<TransactionType> type_filter = {TransactionType::Kind::Any};
         std::string user_filter = "";
 
         void apply();

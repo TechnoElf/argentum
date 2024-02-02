@@ -21,7 +21,7 @@ namespace ag {
     }
 
     int TransactionsModel::columnCount([[maybe_unused]] const QModelIndex& parent) const {
-        return 5;
+        return 6;
     }
 
     QVariant TransactionsModel::data(const QModelIndex& index, int role) const {
@@ -31,10 +31,11 @@ namespace ag {
 
         switch (index.column()) {
             case 0: return this->current[index.row()].timestamp.toLocalTime();
-            case 1: return QString("%1 %2").arg(this->current[index.row()].amount).arg(this->current[index.row()].currency.to_symbol());
+            case 1: return QString("%1 %2").arg(this->current[index.row()].amount).arg((*this->current[index.row()].currency).to_symbol());
             case 2: return this->current[index.row()].status.to_string();
             case 3: return this->current[index.row()].type.to_string();
             case 4: return this->current[index.row()].user.c_str();
+            case 5: return this->current[index.row()].card_type.to_string();
             default: return "Error";
         }
     }
@@ -49,6 +50,7 @@ namespace ag {
                 case 2: return "Status";
                 case 3: return "Type";
                 case 4: return "User";
+                case 5: return "Card Type";
                 default: return "Error";
             }
         } else {
@@ -75,12 +77,12 @@ namespace ag {
         );
     }
 
-    void TransactionsModel::set_status_filter(Status status) {
+    void TransactionsModel::set_status_filter(Enum<Status> status) {
         this->status_filter = status;
         this->apply();
     }
 
-    void TransactionsModel::set_type_filter(TransactionType type) {
+    void TransactionsModel::set_type_filter(Enum<TransactionType> type) {
         this->type_filter = type;
         this->apply();
     }

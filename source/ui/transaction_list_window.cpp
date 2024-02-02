@@ -12,7 +12,7 @@ namespace ag {
             this->status_filter.addItem(n);
         }
         connect(&this->status_filter, &QComboBox::currentTextChanged, this, [this](){
-            this->transactions.set_status_filter(Status::from_string(this->status_filter.currentText().toUtf8().constData()));
+            this->transactions.set_status_filter(Enum<Status>::from_string(this->status_filter.currentText().toUtf8().constData()));
         });
         this->filter_layout.addWidget(&this->status_filter, 0, 1, 1, 1);
 
@@ -22,7 +22,7 @@ namespace ag {
             this->type_filter.addItem(n);
         }
         connect(&this->type_filter, &QComboBox::currentTextChanged, this, [this](){
-            this->transactions.set_type_filter(TransactionType::from_string(this->type_filter.currentText().toUtf8().constData()));
+            this->transactions.set_type_filter(Enum<TransactionType>::from_string(this->type_filter.currentText().toUtf8().constData()));
         });
         this->filter_layout.addWidget(&this->type_filter, 0, 3, 1, 1);
 
